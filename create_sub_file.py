@@ -11,21 +11,23 @@ parser.add_argument('jobid', metavar='ft', type=int, nargs='+',help='unique job 
 
 
 parser.parse_args(jobname,outfile,executable_file,filetype,user_args)
+args = vars(parser.parse_args())
 
-jobname = parser.jobname
-outfile = parser.oufile
-executable_file = parser.executable_file
-filetype = parser.filetype
-arguments = parser.user_args
-jobid=parser.jobid
+jobname = args.jobname
+outfile = args.oufile
+executable_file = args.executable_file
+filetype = args.filetype
+arguments = args.user_args
+jobid=args.jobid
 
-'''TODO: Figure out how to do correct directory locations'''
-os.makedirs("/Users/condor/Desktop/%s_%s" %(jobname,jobid))
+'''TODO: decide on overall execute directory'''
+initialpath=/Users/condor/Desktop/%s_%s" %(jobname,jobid)
+os.makedirs(initialpath)
 writer = open("%s.sub" %jobname, 'w')
 
 writer.write("should_transfer_files = YES\nwhen_to_transfer_output = ON_EXIT\n")
-writer.write("\ntransfer_out_files = $(initialdir)/fact_out.txt\ninitialdir = /Users/condor/Desktop/%s/%s_$(jobnum)" %jobname)
-writer.write("executable=/Users/condor/Desktop/%s/%t\n" %(jobname,executablefile))
+writer.write("\ntransfer_out_files = $(initialdir)/%s.txt\ninitialdir = %s" %(outfile,jobname,initialpath))
+writer.write("executable=%s\n" %(initialpath,executablefile))
 writer.write("output = $(initialdir)/%s.out\n" %jobname)
 writer.write("error = $(initialdir)/%s.err\n" %jobname)
 writer.write("log = $(initialdir)/%s.log\n" %jobname)
