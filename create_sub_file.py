@@ -19,11 +19,13 @@ filetype = parser.filetype
 arguments = parser.user_args
 jobid=parser.jobid
 
-os.makedirs("/Users/condor/Desktop/%s_%s" %jobname,jobid)
+'''TODO: Figure out how to do correct directory locations'''
+os.makedirs("/Users/condor/Desktop/%s_%s" %(jobname,jobid))
 writer = open("%s.sub" %jobname, 'w')
+
 writer.write("should_transfer_files = YES\nwhen_to_transfer_output = ON_EXIT\n")
 writer.write("\ntransfer_out_files = $(initialdir)/fact_out.txt\ninitialdir = /Users/condor/Desktop/%s/%s_$(jobnum)" %jobname)
-writer.write("executable=/Users/condor/Desktop/%s/%t\n" %jobname,executablefile)
+writer.write("executable=/Users/condor/Desktop/%s/%t\n" %(jobname,executablefile))
 writer.write("output = $(initialdir)/%s.out\n" %jobname)
 writer.write("error = $(initialdir)/%s.err\n" %jobname)
 writer.write("log = $(initialdir)/%s.log\n" %jobname)
