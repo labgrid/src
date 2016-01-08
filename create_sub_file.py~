@@ -14,7 +14,7 @@ parser.add_argument('jobid', metavar='ft', type=int, nargs='+',help='unique job 
 parser.parse_args(jobname,outfile,executable_file,filetype,user_args)
 args = vars(parser.parse_args())
 
-#sets up variables
+#
 jobname = args.jobname
 outfile = args.oufile
 executable_file = args.executable_file
@@ -22,13 +22,11 @@ filetype = args.filetype
 arguments = args.user_args
 jobid=args.jobid
 
-#creates directory for job to run in
 '''TODO: decide on overall execute directory'''
-initialpath="/Users/condor/Desktop/%s_%s" %(jobname,jobid)
+initialpath=/Users/condor/Desktop/%s_%s" %(jobname,jobid)
 os.makedirs(initialpath)
-
-#writes the meat of the file
 writer = open("%s.sub" %jobname, 'w')
+
 writer.write("should_transfer_files = YES\nwhen_to_transfer_output = ON_EXIT\n")
 writer.write("\ntransfer_out_files = $(initialdir)/%s.txt\ninitialdir = %s" %(outfile,jobname,initialpath))
 writer.write("executable=%s\n" %(initialpath,executablefile))
@@ -40,5 +38,4 @@ for arg in arguments:
 	writer.write("arguments=%s\n" %arg)
 	writer.write("queue\n")
 
-#submits job
 os.system("condor_submit %s/%s.sub -verbose" %(initialdir,jobname))
